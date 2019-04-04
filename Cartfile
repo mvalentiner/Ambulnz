@@ -1,0 +1,9 @@
+# To build, run:
+#	carthage update --platform iOS
+#
+github "jdg/MBProgressHUD" ~> 1.1.0
+github "mxcl/PromiseKit" ~> 6.8
+github "PromiseKit/CoreLocation" ~> 3.0
+github "PromiseKit/Foundation" ~> 3.0
+github "PromiseKit/MapKit" ~> 3.0
+github "ReactiveCocoa/ReactiveSwift" ~> 5.0
