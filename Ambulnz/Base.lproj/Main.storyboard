@@ -1,43 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XHJ-mE-yrj">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Main View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Pulley View Controller-->
+        <scene sceneID="QIB-Jh-oPA">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MainViewController" customModule="PlacesNear" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ch9-aL-wbc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="XHJ-mE-yrj" customClass="PulleyViewController" customModule="Ambulnz" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="92K-Ht-ak7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="mfH-fF-YNw">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="711"/>
-                            </mapView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="81g-kw-8JB">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="334"/>
+                                <connections>
+                                    <segue destination="Cit-Zj-NFd" kind="embed" id="CWg-5W-qMf"/>
+                                </connections>
+                            </containerView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MOF-Uo-ixb">
+                                <rect key="frame" x="0.0" y="331" width="375" height="336"/>
+                                <connections>
+                                    <segue destination="a7x-EJ-AcX" kind="embed" id="PIo-lA-EOu"/>
+                                </connections>
+                            </containerView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="mfH-fF-YNw" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="1wc-5W-Wde"/>
-                            <constraint firstItem="mfH-fF-YNw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Bns-fz-hBW"/>
-                            <constraint firstItem="mfH-fF-YNw" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="44" id="ut0-WK-fqk"/>
-                            <constraint firstItem="mfH-fF-YNw" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="vfV-bf-5tu"/>
+                            <constraint firstItem="MOF-Uo-ixb" firstAttribute="bottom" secondItem="vor-SS-gxU" secondAttribute="bottom" id="2MD-H4-BFq"/>
+                            <constraint firstItem="81g-kw-8JB" firstAttribute="trailing" secondItem="vor-SS-gxU" secondAttribute="trailing" id="8N0-AS-Fqb"/>
+                            <constraint firstItem="MOF-Uo-ixb" firstAttribute="top" secondItem="vor-SS-gxU" secondAttribute="top" constant="311" id="DKx-Nr-obM"/>
+                            <constraint firstItem="81g-kw-8JB" firstAttribute="top" secondItem="92K-Ht-ak7" secondAttribute="top" id="DUJ-Wh-4tP"/>
+                            <constraint firstItem="MOF-Uo-ixb" firstAttribute="width" secondItem="81g-kw-8JB" secondAttribute="width" id="S9V-YX-iUy"/>
+                            <constraint firstItem="MOF-Uo-ixb" firstAttribute="trailing" secondItem="vor-SS-gxU" secondAttribute="trailing" id="Ym3-6Q-272"/>
+                            <constraint firstItem="81g-kw-8JB" firstAttribute="leading" secondItem="vor-SS-gxU" secondAttribute="leading" id="xdD-x7-qDP"/>
+                            <constraint firstItem="MOF-Uo-ixb" firstAttribute="leading" secondItem="vor-SS-gxU" secondAttribute="leading" id="xsD-Cw-2RO"/>
+                            <constraint firstItem="vor-SS-gxU" firstAttribute="bottom" secondItem="81g-kw-8JB" secondAttribute="bottom" constant="333" id="zrQ-xI-LCQ"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <viewLayoutGuide key="safeArea" id="vor-SS-gxU"/>
                     </view>
                     <connections>
-                        <outlet property="mapView" destination="mfH-fF-YNw" id="a68-kL-CDa"/>
+                        <outlet property="drawerContentContainerView" destination="MOF-Uo-ixb" id="W2d-cp-Ca6"/>
+                        <outlet property="primaryContentContainerView" destination="81g-kw-8JB" id="gLc-F0-qaJ"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="933.60000000000002" y="-564.46776611694156"/>
+            <point key="canvasLocation" x="-31.199999999999999" y="27.436281859070466"/>
+        </scene>
+        <!--Map View Controller-->
+        <scene sceneID="chB-lg-TWW">
+            <objects>
+                <viewController id="Cit-Zj-NFd" customClass="MapViewController" customModule="Ambulnz" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="R3J-of-8kD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="334"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="eyU-pp-Evd">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="334"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="eyU-pp-Evd" secondAttribute="bottom" id="SXe-5g-cdi"/>
+                            <constraint firstAttribute="trailing" secondItem="eyU-pp-Evd" secondAttribute="trailing" id="a1S-EG-jxG"/>
+                            <constraint firstItem="eyU-pp-Evd" firstAttribute="leading" secondItem="R3J-of-8kD" secondAttribute="leading" id="hfJ-Gk-bbx"/>
+                            <constraint firstItem="eyU-pp-Evd" firstAttribute="top" secondItem="R3J-of-8kD" secondAttribute="top" id="qjd-cS-IqG"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="eyU-pp-Evd" id="cj9-EV-EE8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hdf-na-6nR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="953" y="-265"/>
+        </scene>
+        <!--Drawer View Controller-->
+        <scene sceneID="d2z-mW-XtT">
+            <objects>
+                <viewController id="a7x-EJ-AcX" customClass="DrawerViewController" customModule="Ambulnz" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JFX-at-hdm">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="336"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xD0-Cs-SB4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="954" y="242"/>
         </scene>
     </scenes>
 </document>

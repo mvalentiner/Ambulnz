@@ -1,5 +1,5 @@
 //
-//	MainViewController.swift
+//	MapViewController.swift
 //	Places Near
 //
 //	Created by Michael Valentiner on 3/15/19.
@@ -14,7 +14,7 @@ import ReactiveSwift
 import Result
 import UIKit
 
-class MainViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
 	// MARK: UI
 	@IBOutlet weak var mapView : MKMapView!
 	private var progressView : MBProgressHUD?
@@ -35,28 +35,53 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MKMapView
 		return Promise<Bool>.value(CLLocationManager.locationServicesEnabled())
 	}
 
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    override open func loadView() {
+        super.loadView()
+	}
+
 	// MARK: UIViewController overrides
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
 		//** UI
-		// Create the buttonBarView container view.
-		let buttonBarView = UIStackView()
-		buttonBarView.axis = .vertical
-		buttonBarView.distribution = .equalSpacing
-		buttonBarView.constrainTo(width: 44)
-		buttonBarView.constrainTo(height: 89)
-		view.addSubview(buttonBarView)
-		buttonBarView.anchorTo(top: view.safeAreaTopAnchor, right: view.safeAreaRightAnchor, topPadding: 32, rightPadding: 8)
+		// Create the userLocationButtonBarView container view.
+		let userLocationButtonBarView = UIStackView()
+		userLocationButtonBarView.axis = .vertical
+		userLocationButtonBarView.distribution = .equalSpacing
+		userLocationButtonBarView.constrainTo(width: 44)
+		userLocationButtonBarView.constrainTo(height: 44)
+		view.addSubview(userLocationButtonBarView)
+		userLocationButtonBarView.anchorTo(top: view.safeAreaTopAnchor, right: view.safeAreaRightAnchor, topPadding: 32, rightPadding: 16)
 
-		// Create the buttons for the buttonBarView.
-		let button = UIButton(type: .infoDark)
-		button.addTarget(self, action: #selector(handleInfoButtonTap), for: .touchUpInside)
-		let infoButton = makeButtonItem(with: button, andRoundedCorners: [.layerMinXMinYCorner,.layerMaxXMinYCorner])
-		buttonBarView.insertArrangedSubview(infoButton, at: 0)
+		// Create the buttons for the userLocationButtonBarView.
+		let userLocationButton = makeButtonItem(with: MKUserTrackingButton(mapView: mapView), andRoundedCorners: [.layerMinXMinYCorner,.layerMaxXMinYCorner, .layerMinXMaxYCorner,.layerMaxXMaxYCorner])
+		userLocationButtonBarView.insertArrangedSubview(userLocationButton, at: 0)
 
-		let userLocationButton = makeButtonItem(with: MKUserTrackingButton(mapView: mapView), andRoundedCorners: [.layerMinXMaxYCorner,.layerMaxXMaxYCorner])
-		buttonBarView.insertArrangedSubview(userLocationButton, at: 1)
+		// Create the zoomButtonBarView container view.
+		let zoomButtonBarView = UIStackView()
+		zoomButtonBarView.axis = .vertical
+		zoomButtonBarView.distribution = .equalSpacing
+		zoomButtonBarView.constrainTo(width: 44)
+		zoomButtonBarView.constrainTo(height: 92)
+		view.addSubview(zoomButtonBarView)
+		zoomButtonBarView.anchorTo(top: userLocationButtonBarView.bottomAnchor, right: view.safeAreaRightAnchor, topPadding: 44, rightPadding: 16)
+
+		// Create the buttons for the zoomButtonBarView.
+		let inButton = UIButton(type: .custom)
+		inButton.setImage(UIImage(named: "plus-button-icon"), for: .normal)
+		inButton.addTarget(self, action: #selector(handleZoomInButtonTap), for: .touchUpInside)
+		let zoomInButton = makeButtonItem(with: inButton, andRoundedCorners: [.layerMinXMinYCorner,.layerMaxXMinYCorner])
+		zoomButtonBarView.insertArrangedSubview(zoomInButton, at: 0)
+
+		let outButton = UIButton(type: .custom)
+		outButton.setImage(UIImage(named: "minus-button-icon"), for: .normal)
+		outButton.addTarget(self, action: #selector(handleZoomOutButtonTap), for: .touchUpInside)
+		let zoomOutButton = makeButtonItem(with: outButton, andRoundedCorners: [.layerMinXMaxYCorner,.layerMaxXMaxYCorner])
+		zoomButtonBarView.insertArrangedSubview(zoomOutButton, at: 1)
 
 		//** Location
 		// Initialize the locationManager.
@@ -75,20 +100,6 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MKMapView
 		// Bind action to model
 		annotations.bindTo { self.updateMap() }
 
-//		createAndShowProgressHUD()
-
-//		SR.reachabilityService.setReachableHandler { (reachability) in
-//			guard let window = self.view.window,
-//				let rootViewController = window.rootViewController,
-//				let navigationController = rootViewController as? UINavigationController,
-//				navigationController.topViewController == self else {
-//					return
-//			}
-//			if let presentedViewController = self.presentedViewController {
-//				presentedViewController.dismiss(animated: true)
-//			}
-//			self.updateMapAnnotations()
-//		}
 	}
 
 	// ButtonBar helper function
@@ -98,7 +109,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MKMapView
 		containerView.constrainTo(height: 44)
 
 		let backgroundView = UIView()
-		backgroundView.alpha = 0.333
+		backgroundView.alpha = 0.445
 		backgroundView.backgroundColor = .lightGray
 		backgroundView.clipsToBounds = true
 		backgroundView.constrainTo(height: 44)
@@ -113,8 +124,10 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MKMapView
 		return containerView
 	}
 
-	@objc func handleInfoButtonTap() {
-//		self.performSegue(withIdentifier: "segueToSettingsViewController", sender:self)
+	@objc func handleZoomInButtonTap() {
+	}
+
+	@objc func handleZoomOutButtonTap() {
 	}
 
 	private func showLocationServicesRequestDialog() {
@@ -377,7 +390,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, MKMapView
 	}
 }
 
-extension MainViewController : PlaceAnnotationDelegate {
+extension MapViewController : PlaceAnnotationDelegate {
     internal func handleAnnotationPress(forAnnotation annotation: PlaceAnnotation) {
 		self.selectedAnnotation = annotation
 //TODO
