@@ -125,9 +125,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 	}
 
 	@objc func handleZoomInButtonTap() {
+		mapView.zoom(byFactor: 0.5)
 	}
 
 	@objc func handleZoomOutButtonTap() {
+		mapView.zoom(byFactor: 2.0)
 	}
 
 	private func showLocationServicesRequestDialog() {
