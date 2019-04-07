@@ -12,7 +12,6 @@
         <!--Pulley View Controller-->
         <scene sceneID="QIB-Jh-oPA">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ch9-aL-wbc" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="XHJ-mE-yrj" customClass="PulleyViewController" customModule="Ambulnz" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="92K-Ht-ak7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -50,6 +49,7 @@
                         <outlet property="primaryContentContainerView" destination="81g-kw-8JB" id="gLc-F0-qaJ"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ch9-aL-wbc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-31.199999999999999" y="27.436281859070466"/>
         </scene>
@@ -72,6 +72,7 @@
                             <constraint firstItem="eyU-pp-Evd" firstAttribute="leading" secondItem="R3J-of-8kD" secondAttribute="leading" id="hfJ-Gk-bbx"/>
                             <constraint firstItem="eyU-pp-Evd" firstAttribute="top" secondItem="R3J-of-8kD" secondAttribute="top" id="qjd-cS-IqG"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="tdV-pN-Rhi"/>
                     </view>
                     <connections>
                         <outlet property="mapView" destination="eyU-pp-Evd" id="cj9-EV-EE8"/>
@@ -81,19 +82,19 @@
             </objects>
             <point key="canvasLocation" x="953" y="-265"/>
         </scene>
-        <!--Drawer View Controller-->
+        <!--Location Search View Controller-->
         <scene sceneID="d2z-mW-XtT">
             <objects>
-                <viewController id="a7x-EJ-AcX" customClass="DrawerViewController" customModule="Ambulnz" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="JFX-at-hdm">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="336"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </view>
-                </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xD0-Cs-SB4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="a7x-EJ-AcX" customClass="LocationSearchViewController" customModule="Ambulnz" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="rb6-At-WPI">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="336"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                     </view>
+                 </viewController>
             </objects>
-            <point key="canvasLocation" x="954" y="242"/>
+            <point key="canvasLocation" x="952.79999999999995" y="241.97901049475263"/>
         </scene>
     </scenes>
 </document>

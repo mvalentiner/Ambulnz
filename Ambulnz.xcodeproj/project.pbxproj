@@ -35,7 +35,7 @@
 		4C45F16B22563EE900597821 /* Places.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F15522563EE900597821 /* Places.swift */; };
 		4C45F16C22563EE900597821 /* ServiceTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F15622563EE900597821 /* ServiceTemplate.swift */; };
 		4C45F16D22563EE900597821 /* PlacesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F15722563EE900597821 /* PlacesService.swift */; };
-		4C706D3A2256A565009B64CF /* DrawerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C706D392256A565009B64CF /* DrawerViewController.swift */; };
+		4C706D3A2256A565009B64CF /* LocationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C706D392256A565009B64CF /* LocationSearchViewController.swift */; };
 		4CB6807C2256881700D77726 /* PulleyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB6805E2256881700D77726 /* PulleyViewController.swift */; };
 		4CB6807D2256881700D77726 /* UIViewController+PulleyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB6805F2256881700D77726 /* UIViewController+PulleyViewController.swift */; };
 		4CB6807E2256881700D77726 /* PulleyPassthroughScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB680602256881700D77726 /* PulleyPassthroughScrollView.swift */; };
@@ -75,7 +75,7 @@
 		4C45F15522563EE900597821 /* Places.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Places.swift; sourceTree = "<group>"; };
 		4C45F15622563EE900597821 /* ServiceTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceTemplate.swift; sourceTree = "<group>"; };
 		4C45F15722563EE900597821 /* PlacesService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesService.swift; sourceTree = "<group>"; };
-		4C706D392256A565009B64CF /* DrawerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerViewController.swift; sourceTree = "<group>"; };
+		4C706D392256A565009B64CF /* LocationSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewController.swift; sourceTree = "<group>"; };
 		4CB6805E2256881700D77726 /* PulleyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PulleyViewController.swift; sourceTree = "<group>"; };
 		4CB6805F2256881700D77726 /* UIViewController+PulleyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+PulleyViewController.swift"; sourceTree = "<group>"; };
 		4CB680602256881700D77726 /* PulleyPassthroughScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PulleyPassthroughScrollView.swift; sourceTree = "<group>"; };
@@ -139,7 +139,7 @@
 				4C45F14022563EE900597821 /* LaunchScreen.jpg */,
 				4C45F14322563EE900597821 /* LaunchScreen.storyboard */,
 				4C45F14522563EE900597821 /* Main.storyboard */,
-				4C706D392256A565009B64CF /* DrawerViewController.swift */,
+				4C706D392256A565009B64CF /* LocationSearchViewController.swift */,
 				4C45F14122563EE900597821 /* MapViewController.swift */,
 				4C45F14722563EE900597821 /* MyPlayground.playground */,
 				4C45F13A22563EE900597821 /* PlaceAnnotation.swift */,
@@ -365,7 +365,7 @@
 				4C45F15922563EE900597821 /* UIView+Anchoring.swift in Sources */,
 				4C45F15822563EE900597821 /* PlaceAnnotation.swift in Sources */,
 				4CB6807E2256881700D77726 /* PulleyPassthroughScrollView.swift in Sources */,
-				4C706D3A2256A565009B64CF /* DrawerViewController.swift in Sources */,
+				4C706D3A2256A565009B64CF /* LocationSearchViewController.swift in Sources */,
 				4C45F16522563EE900597821 /* Merging.swift in Sources */,
 				4C45F16222563EE900597821 /* Initialization.swift in Sources */,
 				4C45F15B22563EE900597821 /* UIView+SafeArea.swift in Sources */,
