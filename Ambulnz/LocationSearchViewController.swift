@@ -6,18 +6,21 @@
 //  Copyright © 2019 Heliotropix, LLC. All rights reserved.
 //
 
+import ReactiveSwift
 import UIKit
 
 class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
 
 	private var resultsTableView: UITableView!	// Intentional forced unwrapping
 	private var searchBar : UISearchBar!	// Intentional forced unwrapping
-
 	private let locationCellId = "LocationCellId"
+
+	var locations = MutableProperty<[Place]>([])
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		//** UI - build the view hierarchy.
 		let tableViewWidth = view.frame.size.width
 		let spacerViewHeight : CGFloat = 12.0
 
@@ -48,30 +51,35 @@ class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITa
 			let tableViewHeight = view.frame.size.height - headerViewHeight
 			let tableViewFrame = CGRect(x: 0.0, y: headerViewHeight, width: tableViewWidth, height: tableViewHeight)
 			let tableView = UITableView(frame: tableViewFrame)
+			tableView.dataSource = self
+			tableView.delegate = self
 			tableView.register(UITableViewCell.self, forCellReuseIdentifier: locationCellId)
 			return tableView
 		}()
 		view.addSubview(self.resultsTableView)
-		
+
+		//** UI - controller actions
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
 		guard let window = UIApplication.shared.windows.first else {
 			return
 		}
 		window.addGestureRecognizer(tapGesture)
+
+		//** Bind model to UI
+		locations.bindTo {
+			self.resultsTableView.reloadData()
+		}
 	}
 
-	let locations = ["Here", "There", "Everywhere"]
-	var filteredLocations : [String] = []
-
 	public func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-// 		guard let searchText = searchController.searchBar.text else {
-//			return
-//		}
-//		filteredLocations = locations.filter({ (location) -> Bool in
-//			return location.lowercased().contains(searchText.lowercased())
-//		})
-//
-//		tableView.reloadData()
+		locations.value.removeAll()
+		guard searchText != "" else {
+			return
+		}
+		let googlePlaceService = SR.googlePlaceService
+		googlePlaceService.getPlaces(forSearchText: searchText) { (placesArray) in
+			self.locations.value.append(contentsOf: placesArray)
+		}
    }
 
 	public func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
@@ -85,12 +93,12 @@ class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITa
 	}
 
 	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return filteredLocations.count
+		return locations.value.count
 	}
 
 	public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: locationCellId, for: indexPath)
-		cell.textLabel?.text = filteredLocations[indexPath.row]
+		cell.textLabel?.text = locations.value[indexPath.row].title
 		return cell
 	}
 

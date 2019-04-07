@@ -20,6 +20,14 @@ struct Place {
 	let title : String
 	let description : String?
 	let preview : UIImage?
+	
+	init(uid : PlaceUID, location : CLLocationCoordinate2D, title : String, description : String? = nil, preview : UIImage? = nil) {
+		self.uid = uid
+		self.location = location
+		self.title = title
+		self.description = description
+		self.preview = preview
+	}
 }
 
 struct PlaceDetail {

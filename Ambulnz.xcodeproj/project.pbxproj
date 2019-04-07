@@ -34,7 +34,6 @@
 		4C45F16A22563EE900597821 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F15322563EE900597821 /* Service.swift */; };
 		4C45F16B22563EE900597821 /* Places.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F15522563EE900597821 /* Places.swift */; };
 		4C45F16C22563EE900597821 /* ServiceTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F15622563EE900597821 /* ServiceTemplate.swift */; };
-		4C45F16D22563EE900597821 /* PlacesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F15722563EE900597821 /* PlacesService.swift */; };
 		4C706D3A2256A565009B64CF /* LocationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C706D392256A565009B64CF /* LocationSearchViewController.swift */; };
 		4CB6807C2256881700D77726 /* PulleyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB6805E2256881700D77726 /* PulleyViewController.swift */; };
 		4CB6807D2256881700D77726 /* UIViewController+PulleyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB6805F2256881700D77726 /* UIViewController+PulleyViewController.swift */; };
@@ -43,6 +42,8 @@
 		4CB680812256881700D77726 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 4CB680662256881700D77726 /* LICENSE */; };
 		4CFE8617225A79ED002BB492 /* MKRegion+isValid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE8616225A79ED002BB492 /* MKRegion+isValid.swift */; };
 		4CFE8619225A7B93002BB492 /* MapView+zoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE8618225A7B93002BB492 /* MapView+zoom.swift */; };
+		4CFE8620225A8A52002BB492 /* GooglePlaceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFE861F225A8A52002BB492 /* GooglePlaceService.swift */; };
+		4CFE8621225A9653002BB492 /* PlacesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F15722563EE900597821 /* PlacesService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +86,7 @@
 		4CB680662256881700D77726 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		4CFE8616225A79ED002BB492 /* MKRegion+isValid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKRegion+isValid.swift"; sourceTree = "<group>"; };
 		4CFE8618225A7B93002BB492 /* MapView+zoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView+zoom.swift"; sourceTree = "<group>"; };
+		4CFE861F225A8A52002BB492 /* GooglePlaceService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GooglePlaceService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 				4C45F15322563EE900597821 /* Service.swift */,
 				4C45F15422563EE900597821 /* Places */,
 				4C45F15622563EE900597821 /* ServiceTemplate.swift */,
+				4CFE861F225A8A52002BB492 /* GooglePlaceService.swift */,
 				4C45F15722563EE900597821 /* PlacesService.swift */,
 			);
 			path = Services;
@@ -357,9 +360,10 @@
 				4C45F16922563EE900597821 /* AppPropertyService.swift in Sources */,
 				4CB6807F2256881700D77726 /* UIView+constrainToParent.swift in Sources */,
 				4C45F16422563EE900597821 /* JSON.swift in Sources */,
+				4CFE8620225A8A52002BB492 /* GooglePlaceService.swift in Sources */,
 				4C45F15E22563EE900597821 /* MapViewController.swift in Sources */,
 				4CFE8617225A79ED002BB492 /* MKRegion+isValid.swift in Sources */,
-				4C45F16D22563EE900597821 /* PlacesService.swift in Sources */,
+				4CFE8621225A9653002BB492 /* PlacesService.swift in Sources */,
 				4C45F16722563EE900597821 /* AppDelegate.swift in Sources */,
 				4C45F15C22563EE900597821 /* MutableProperty+bindTo.swift in Sources */,
 				4C45F16C22563EE900597821 /* ServiceTemplate.swift in Sources */,
