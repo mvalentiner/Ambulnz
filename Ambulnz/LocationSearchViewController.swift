@@ -52,6 +52,12 @@ class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITa
 			return tableView
 		}()
 		view.addSubview(self.resultsTableView)
+		
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+		guard let window = UIApplication.shared.windows.first else {
+			return
+		}
+		window.addGestureRecognizer(tapGesture)
 	}
 
 	let locations = ["Here", "There", "Everywhere"]
@@ -90,6 +96,12 @@ class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITa
 
 	// MARK: UITableViewDelegate functions
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		searchBar.resignFirstResponder()
+	}
+}
+
+extension LocationSearchViewController {
+	@objc func handleTap(_ sender: UIGestureRecognizer) {
 		searchBar.resignFirstResponder()
 	}
 }
@@ -134,6 +146,6 @@ extension PulleyViewController {
 		let newFrame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: frame.size.height + height)
 		view.frame = newFrame
 
-//		setDrawerPosition(position: .collapsed, animated: true)
+		setDrawerPosition(position: .collapsed, animated: true)
 	}
 }
