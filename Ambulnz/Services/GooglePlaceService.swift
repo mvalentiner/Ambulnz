@@ -24,13 +24,15 @@ extension ServiceRegistry {
 
 //** GooglePlaceService - public interface
 protocol GooglePlaceService : Service {
-	func getPlaces(forSearchText : String, completionHandler : @escaping ([Place]) -> Void)
+	func getPlaces(forSearchText searchText: String, completionHandler: @escaping (Place?) -> Void)
+	func search(forAddress searchText: String, completionHandler: @escaping (Place?) -> Void)
 }
 
 //** GooglePlaceService - private implementation interface
 protocol PrivateGooglePlaceService : GooglePlaceService {
 	var apiKey : String { get }
 	var googlePlaceSourceUID : String { get }
+	var sessionToken : GMSAutocompleteSessionToken { get }
 }
 
 //** GooglePlaceService - default implementation
@@ -47,36 +49,91 @@ extension PrivateGooglePlaceService {
 		}
 	}
 
-	internal func getPlaces(forSearchText searchText: String, completionHandler: @escaping ([Place]) -> Void) {
-		let placesClient = GMSPlacesClient.shared()
-		let filter = GMSAutocompleteFilter()
-		filter.type = .establishment
-		let token = GMSAutocompleteSessionToken.init()
-		placesClient.findAutocompletePredictions(fromQuery: searchText, bounds: nil, boundsMode: GMSAutocompleteBoundsMode.bias,
-				filter: filter, sessionToken: token) { (results, error) in
-			guard error == nil else {
-				print("Autocomplete error == \(String(describing: error))")
-				return
-			}
-			guard let results = results else {
-				completionHandler([])
-				return
-			}
-			let places = results.map { (prediction) -> Place in
-				self.makePlace(from: prediction)
-			}
-			completionHandler(places)
+	var sessionToken : GMSAutocompleteSessionToken {
+		get {
+			return GMSAutocompleteSessionToken.init()
 		}
 	}
 
-	private func makePlace(from prediction: GMSAutocompletePrediction) -> Place {
-		let placeUID = PlaceUID(placeSourceUID: self.googlePlaceSourceUID, nativePlaceId: prediction.placeID)
-		return Place(uid: placeUID, location: CLLocationCoordinate2D(), title: prediction.attributedFullText.string)
+	internal func getPlaces(forSearchText searchText: String, completionHandler: @escaping (Place?) -> Void) {
+		let filter = GMSAutocompleteFilter()
+		filter.type = .establishment
+		GMSPlacesClient.shared().findAutocompletePredictions(fromQuery: searchText, bounds: nil, boundsMode: GMSAutocompleteBoundsMode.bias,
+				filter: filter, sessionToken: self.sessionToken) { (results, error) in
+			guard error == nil else {
+//				print("Autocomplete error == \(String(describing: error))")
+				return
+			}
+			guard let results = results else {
+				completionHandler(nil)
+				return
+			}
+			results.forEach { (prediction) in
+				self.makePlace(from: prediction, completionHandler: completionHandler)
+			}
+		}
+	}
+
+	private func makePlace(from prediction: GMSAutocompletePrediction, completionHandler: @escaping (Place?) -> Void) {
+		let placeId = prediction.placeID
+		GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeId, placeFields: GMSPlaceField.coordinate, sessionToken: self.sessionToken) { (place, error) in
+			guard error == nil else {
+				completionHandler(nil)
+				return
+			}
+			guard let place = place else {
+				completionHandler(nil)
+				return
+			}
+			let coordinate = place.coordinate
+			let placeUID = PlaceUID(placeSourceUID: self.googlePlaceSourceUID, nativePlaceId: prediction.placeID)
+			completionHandler(Place(uid: placeUID, location: coordinate, title: prediction.attributedFullText.string))
+		}
+	}
+
+	func search(forAddress searchText: String, completionHandler: @escaping (Place?) -> Void) {
+		do {
+			let request = try GoogleGeocodingRequest(withSearchText: searchText, apiKey: self.apiKey)
+			try request.load().done { (json) in
+				guard let status = json["status"]?.stringValue, status == "OK" else {
+					completionHandler(nil)
+					return
+				}
+				guard let results = json["results"]?.arrayValue else {
+					completionHandler(nil)
+					return
+				}
+				results.forEach { (json) in
+					guard let formattedAddress = json["formatted_address"]?.stringValue, formattedAddress != "" else {
+						completionHandler(nil)
+						return
+					}
+					guard let location = json["geometry"]?["location"]?.objectValue,
+							let lat = location["lat"]?.floatValue, let lon = location["lng"]?.floatValue else {
+						completionHandler(nil)
+						return
+					}
+					guard let placeId = json["place_id"]?.stringValue else {
+						completionHandler(nil)
+						return
+					}
+					let placeUId = PlaceUID(placeSourceUID: self.googlePlaceSourceUID, nativePlaceId: placeId)
+					let coordinate = CLLocationCoordinate2D(latitude: Double(lat), longitude: Double(lon))
+					let place = Place(uid: placeUId, location: coordinate, title: formattedAddress)
+					completionHandler(place)
+				}
+			}.catch { error in
+				completionHandler(nil)
+			}
+		}
+		catch {
+			completionHandler(nil)
+		}
 	}
 }
 
 internal class GooglePlaceServiceImplementation : PrivateGooglePlaceService {
-	let apiKey = "AIzaSyCmh0opHRdyjL_a5gizLINf8PVaIocnW8g"
+	let apiKey = "<replace with your api key here>"
 
 	static func register() {
 		SR.add(service: GooglePlaceServiceImplementation())
@@ -87,20 +144,94 @@ internal class GooglePlaceServiceImplementation : PrivateGooglePlaceService {
 	}
 }
 
-class GoogleFindPlaceRequest : UnauthenticatedDataRequest {
+enum GoogleGeocodingRequestError : Error {
+	case searchTextEncodingError
+}
+
+private class GoogleGeocodingRequest : UnauthenticatedDataRequest {
 	typealias RequestedDataType = JSON
 	var endpointURL : String {
 		get {
-			return "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?"
-				+ "key=\(apiKey)&inputtype=textquery&input=\(searchText)"
-				+ "&fields=formatted_address,geometry,icon,id,name,permanently_closed,photos,place_id,plus_code,scope,types,user_ratings_total"
-//				+ "&locationbias=rectangle:south,west|north,east"
+			return "https://maps.googleapis.com/maps/api/geocode/json?\(queryParams)"
 		}
 	}
-	let apiKey : String
-	let searchText : String
-	init(withSearchText searchText: String, apiKey: String) {
+
+	private let apiKey : String
+	private let queryParams : String
+
+	init(withSearchText searchText: String, apiKey: String) throws {
 		self.apiKey = apiKey
-		self.searchText = searchText
+		let replacementSearchText = searchText.replacingOccurrences(of: " ", with: "+")
+		guard let queryParams = "address=\(replacementSearchText)&key=\(apiKey)".addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
+			throw GoogleGeocodingRequestError.searchTextEncodingError
+		}
+		self.queryParams = queryParams
+	}
+}
+
+internal class GooglePlaceServiceMockImplementation : PrivateGooglePlaceService {
+	var apiKey: String = ""
+	
+	static func register() {
+		SR.add(service: self.init())
+	}
+
+	required init() {
+//		GMSPlacesClient.provideAPIKey(self.apiKey)
+	}
+
+	func search(forAddress searchText: String, completionHandler: @escaping (Place?) -> Void) {
+		do {
+			let jsonDict = [
+				"results" : [
+					[
+						"formatted_address" : "1600 Amphitheatre Parkway, Mountain View, CA 94043, USA",
+							"geometry" : [
+							"location" : [
+								"lat" : 37.4224764,
+								"lng" : -122.0842499
+							],
+						],
+						"place_id" : "ChIJ2eUgeAK6j4ARbn5u_wAGqWA",
+						"types" : [ "street_address" ]
+					]
+				],
+				"status" : "OK"
+			] as [String : JSON]
+			let jsonEncoder = JSONEncoder()
+			let jsonData = try! jsonEncoder.encode(jsonDict)
+			let json = try JSONDecoder().decode(JSON.self, from: jsonData)
+
+			guard let status = json["status"]?.stringValue, status == "OK" else {
+				completionHandler(nil)
+				return
+			}
+			guard let results = json["results"]?.arrayValue else {
+				completionHandler(nil)
+				return
+			}
+			results.forEach { (json) in
+				guard let formattedAddress = json["formatted_address"]?.stringValue, formattedAddress != "" else {
+					completionHandler(nil)
+					return
+				}
+				guard let location = json["geometry"]?["location"]?.objectValue,
+						let lat = location["lat"]?.floatValue, let lon = location["lng"]?.floatValue else {
+					completionHandler(nil)
+					return
+				}
+				guard let placeId = json["place_id"]?.stringValue else {
+					completionHandler(nil)
+					return
+				}
+				let placeUId = PlaceUID(placeSourceUID: self.googlePlaceSourceUID, nativePlaceId: placeId)
+				let coordinate = CLLocationCoordinate2D(latitude: Double(lat), longitude: Double(lon))
+				let place = Place(uid: placeUId, location: coordinate, title: formattedAddress)
+				completionHandler(place)
+			}
+		}
+		catch {
+			completionHandler(nil)
+		}
 	}
 }

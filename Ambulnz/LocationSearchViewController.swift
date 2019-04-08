@@ -13,8 +13,10 @@ class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITa
 
 	private var resultsTableView: UITableView!	// Intentional forced unwrapping
 	private var searchBar : UISearchBar!	// Intentional forced unwrapping
+
 	private let locationCellId = "LocationCellId"
 
+	// locations is a ReactiveSwift property that we can bind an action to that gets called whenever if changes.
 	var locations = MutableProperty<[Place]>([])
 
 	override func viewDidLoad() {
@@ -58,18 +60,24 @@ class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITa
 		}()
 		view.addSubview(self.resultsTableView)
 
-		//** UI - controller actions
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+		//** UI - add a UITapGestureRecognizer that we use to manage the keyboard.
+		let tapGesture : UITapGestureRecognizer = {
+			let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+			gestureRecognizer.delegate = self
+			return gestureRecognizer
+		}()
 		guard let window = UIApplication.shared.windows.first else {
 			return
 		}
 		window.addGestureRecognizer(tapGesture)
 
-		//** Bind model to UI
+		//** Bind the RectiveSwift locations model to UI
 		locations.bindTo {
 			self.resultsTableView.reloadData()
 		}
 	}
+
+	// MARK: UISearchBarDelegate functions
 
 	public func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 		locations.value.removeAll()
@@ -77,10 +85,32 @@ class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITa
 			return
 		}
 		let googlePlaceService = SR.googlePlaceService
-		googlePlaceService.getPlaces(forSearchText: searchText) { (placesArray) in
-			self.locations.value.append(contentsOf: placesArray)
+		googlePlaceService.getPlaces(forSearchText: searchText) { (place) in
+			guard let place = place else {
+				return
+			}
+			self.locations.value.append(place)
 		}
    }
+
+	public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		guard let searchText = searchBar.text, searchText != "" else {
+			return
+		}
+
+		let googlePlaceService = SR.googlePlaceService
+		googlePlaceService.search(forAddress: searchText) { (place) in
+	
+			searchBar.resignFirstResponder()
+	
+			guard let place = place else {
+				return
+			}
+			self.locations.value.removeAll()
+			self.locations.value.append(place)
+			self.show(place: place)
+		}
+	}
 
 	public func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
 		searchBar.resignFirstResponder()
@@ -104,16 +134,33 @@ class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITa
 
 	// MARK: UITableViewDelegate functions
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		let place = locations.value[indexPath.row]
+		show(place: place)
 		searchBar.resignFirstResponder()
+	}
+	
+	// Helper function to update the map
+	private func show(place: Place) {
+		SR.mapService.show(place: place)
 	}
 }
 
-extension LocationSearchViewController {
+// MARK: UIGestureRecognizerDelegate - used to manage the keyboard.
+extension LocationSearchViewController : UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+		if touch.view?.isDescendant(of: self.resultsTableView) == true {
+			// Make sure the user is not tapping on the table view. This allows tap event to propogate to the table view.
+			return false
+		}
+		return true
+	}
+
 	@objc func handleTap(_ sender: UIGestureRecognizer) {
 		searchBar.resignFirstResponder()
 	}
 }
 
+// MARK: PulleyViewController extension - add functionality to respond to hide/show events
 extension PulleyViewController {
 	override open func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)

@@ -14,7 +14,25 @@ import ReactiveSwift
 import Result
 import UIKit
 
-class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+private struct MapServiceName {
+	static let serviceName = "MapService"
+}
+
+extension ServiceRegistry {
+	var mapService : MapService {
+		get {
+			return serviceWith(name: MapServiceName.serviceName) as! MapService	// Intentional force unwrapping
+		}
+	}
+}
+
+// Expose the MapViewController as the MapService
+protocol MapService : Service {
+	func show(place: Place)
+}
+
+class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, MapService {
+
 	// MARK: UI
 	@IBOutlet weak var mapView : MKMapView!
 	private var progressView : MBProgressHUD?
@@ -35,12 +53,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 		return Promise<Bool>.value(CLLocationManager.locationServicesEnabled())
 	}
 
+	var serviceName : String {
+		get {
+			return MapServiceName.serviceName
+		}
+	}
+
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
     override open func loadView() {
         super.loadView()
+		// Expose the MapViewController as the MapService by registering self with the ServiceRegistry
+		SR.add(service: self)
 	}
 
 	// MARK: UIViewController overrides
@@ -99,7 +125,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 
 		// Bind action to model
 		annotations.bindTo { self.updateMap() }
-
+		
+		// Center on the user's initial location on the map.
+		guard let userLocation = locationManager.location else {
+			return
+		}
+		let initialSpan = MKCoordinateSpan.init(latitudeDelta: 0.1, longitudeDelta: 0.1)
+		let initialRegion = MKCoordinateRegion(center: userLocation.coordinate, span: initialSpan)
+		mapView.region = initialRegion	// this causes mapView(_:regionDidChangeAnimated:) to get called
+		mapView.centerCoordinate = userLocation.coordinate
+		mapView.userTrackingMode = MKUserTrackingMode.follow
 	}
 
 	// ButtonBar helper function
@@ -144,19 +179,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 		self.present(alertController, animated: true)
 	}
 
-	private func showProgressHUD() {
-		guard self.progressView == nil else {
-			return
-		}
+	//** MapService functions
+	func show(place : Place) {
+		mapView.centerCoordinate = place.location
 
-		let progressView = MBProgressHUD.showAdded(to: self.view, animated: true)
-		progressView.graceTime = 0.5
-		progressView.minShowTime = 1.0
-		progressView.bezelView.alpha = 0.5
-		progressView.bezelView.backgroundColor = UIColor.darkGray
-		progressView.bezelView.isOpaque = false
-		progressView.removeFromSuperViewOnHide = true
-		self.progressView = progressView
+		let annotation = PlaceAnnotation(withPlace: place, andDelegate: self)
+		self.annotations.value.removeAll()
+		self.annotations.value.append(annotation)
 	}
 
 	// MARK: CLLocationManagerDelegate methods
@@ -166,6 +195,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 			// we are authorized.
 			locationManager.startMonitoringSignificantLocationChanges()
 			mapView.showsUserLocation = true
+
+			guard let userLocation = locationManager.location else {
+				return
+			}
+			let initialSpan = MKCoordinateSpan.init(latitudeDelta: 0.1, longitudeDelta: 0.1)
+			let initialRegion = MKCoordinateRegion(center: userLocation.coordinate, span: initialSpan)
+			mapView.region = initialRegion	// this causes mapView(_:regionDidChangeAnimated:) to get called
+			mapView.centerCoordinate = userLocation.coordinate
+			mapView.userTrackingMode = MKUserTrackingMode.follow
 		}
 		else if status == CLAuthorizationStatus.denied {
 			showLocationServicesRequestDialog()
@@ -195,42 +233,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 		didSelectAnnotation = false
 	}
 
-    internal func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-		guard hasFirstLocation == true else {
-			// Wait until mapView(_:didUpdate:) has been called
-			return
-		}
-
-		guard self.isRegionChangeWithinTolerance(mapView, tolerance:0.3333) == true else {
-			return
-		}
-
-		requestMapPlacesAndUpdateAnnotations()
-	}
-
-	private func isRegionChangeWithinTolerance(_ mapView: MKMapView, tolerance: Double) -> Bool {
-		let currentRegion = mapView.region
-		let currentRegionInViewCoords = mapView.convert(currentRegion, toRectTo: mapView)
-
-		let lastRegionInViewCoords = mapView.convert(lastRegion, toRectTo: mapView)
-
-		let xMaxTolerance = Int(currentRegionInViewCoords.size.width * CGFloat(tolerance))
-
-		let xOriginDelta = abs(Int(lastRegionInViewCoords.origin.x - currentRegionInViewCoords.origin.x))
-		if xOriginDelta > xMaxTolerance {
-			return false
-		}
-
-		let yMaxTolerance = Int(currentRegionInViewCoords.size.height * CGFloat(tolerance))
-
-		let yOriginDelta = abs(Int(lastRegionInViewCoords.origin.y - currentRegionInViewCoords.origin.y))
-		if yOriginDelta > yMaxTolerance {
-			return false
-		}
-
-		return true
-	}
-
 	internal func mapView(_ mapView: MKMapView, didUpdate updatedUserLocation: MKUserLocation) {
 		guard hasFirstLocation == true else {
 			hasFirstLocation = true
@@ -245,77 +247,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 			userLocation = updatedUserLocation.coordinate
 			return
 		}
-
-		guard self.isRegionChangeWithinTolerance(mapView, tolerance:0.3333) == true else {
-			return
-		}
-
-		requestMapPlacesAndUpdateAnnotations()
-	}
-
-	internal func requestMapPlacesAndUpdateAnnotations() {
-		guard didSelectAnnotation == false else {
-			// Don't get more annotations if the map is displaying an annotation.
-			return
-		}
-
-//		showProgressHUD()
-
-		lastRegion = mapView.region
-		mapView.removeAnnotations(annotations.value)
-		annotations.value.removeAll(keepingCapacity: true)
-
-//		guard SR.reachabilityService.isReachable == true else {
-//			DispatchQueue.main.async {
-//				if let progressView = self._progressView {
-//					self._progressView = nil
-//					progressView.hide(animated: true)
-//				}
-//				let alertController = UIAlertController(title: "Network", message: "Network is unavailable",
-//					preferredStyle:UIAlertController.Style.alert)
-//				let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler:nil)
-//				alertController.addAction(okAction)
-//				self.present(alertController, animated: true, completion: {})
-//			}
-//			return
-//		}
-
-//		var maximumNumberOfPhotos = 100
-//		let maxDimension = Int(max(UIScreen.main.bounds.width, UIScreen.main.bounds.height))
-//		if maxDimension > 768 {
-//			// http://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions
-//			maximumNumberOfPhotos = 204
-//		}
-
-		let topRight = CLLocationCoordinate2D(
-			latitude:(mapView.centerCoordinate.latitude + mapView.region.span.latitudeDelta),
-			longitude:(mapView.centerCoordinate.longitude + mapView.region.span.longitudeDelta))
-		let bottomLeft = CLLocationCoordinate2D(
-			latitude:(mapView.region.center.latitude - mapView.region.span.latitudeDelta),
-			longitude:(mapView.centerCoordinate.longitude - mapView.region.span.longitudeDelta))
-
-		let rect = CoordinateRect(topRight: topRight, bottomLeft: bottomLeft)
-		SR.placesService.getPlaces(forRegion: rect) { places in
-			let annotations = places.map { place -> PlaceAnnotation in
-				return PlaceAnnotation(withPlace: place, andDelegate: self)
-			}
-			self.annotations.value.append(contentsOf: annotations)
-		}
 	}
 
 	private func updateMap() {
 		DispatchQueue.main.async {
+			self.mapView.removeAnnotations(self.mapView.annotations)
 			self.annotations.value.forEach { (annotation) in
 				self.mapView.addAnnotation(annotation)
 			}
-
 			self.mapView.setNeedsDisplay()
-
-//			if let progressView = self._progressView {
-//				self._progressView = nil
-//				progressView.hide(animated: true)
-//			}
-//			self._photosButton.isEnabled = self.annotations.value.isEmpty == false
 		}
 	}
 
