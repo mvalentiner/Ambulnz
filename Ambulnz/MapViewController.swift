@@ -134,7 +134,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 		let initialRegion = MKCoordinateRegion(center: userLocation.coordinate, span: initialSpan)
 		mapView.region = initialRegion	// this causes mapView(_:regionDidChangeAnimated:) to get called
 		mapView.centerCoordinate = userLocation.coordinate
-		mapView.userTrackingMode = MKUserTrackingMode.follow
+		mapView.userTrackingMode = MKUserTrackingMode.none
 	}
 
 	// ButtonBar helper function
@@ -181,6 +181,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 
 	//** MapService functions
 	func show(place : Place) {
+		mapView.userTrackingMode = MKUserTrackingMode.none	// the map doesn't center on a new location unless is not tracking the user.
 		mapView.centerCoordinate = place.location
 
 		let annotation = PlaceAnnotation(withPlace: place, andDelegate: self)
@@ -203,7 +204,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 			let initialRegion = MKCoordinateRegion(center: userLocation.coordinate, span: initialSpan)
 			mapView.region = initialRegion	// this causes mapView(_:regionDidChangeAnimated:) to get called
 			mapView.centerCoordinate = userLocation.coordinate
-			mapView.userTrackingMode = MKUserTrackingMode.follow
+			mapView.userTrackingMode = MKUserTrackingMode.none
 		}
 		else if status == CLAuthorizationStatus.denied {
 			showLocationServicesRequestDialog()
@@ -241,7 +242,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 			let initialRegion = MKCoordinateRegion(center: updatedUserLocation.coordinate, span: initialSpan)
 			mapView.region = initialRegion	// this causes mapView(_:regionDidChangeAnimated:) to get called
 			mapView.centerCoordinate = updatedUserLocation.coordinate
-			mapView.userTrackingMode = MKUserTrackingMode.follow
+			mapView.userTrackingMode = MKUserTrackingMode.none
 
 			lastRegion = mapView.region
 			userLocation = updatedUserLocation.coordinate
