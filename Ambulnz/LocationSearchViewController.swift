@@ -73,7 +73,7 @@ class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITa
 
 	public func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 		locations.value.removeAll()
-		guard searchText != "" else {
+		guard searchText != "" && searchText.count > 3 else {
 			return
 		}
 		let googlePlaceService = SR.googlePlaceService
