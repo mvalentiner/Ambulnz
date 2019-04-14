@@ -61,7 +61,7 @@ extension PrivateGooglePlaceService {
 		GMSPlacesClient.shared().findAutocompletePredictions(fromQuery: searchText, bounds: nil, boundsMode: GMSAutocompleteBoundsMode.bias,
 				filter: filter, sessionToken: self.sessionToken) { (results, error) in
 			guard error == nil else {
-//				print("Autocomplete error == \(String(describing: error))")
+				print("Autocomplete error == \(String(describing: error))")
 				return
 			}
 			guard let results = results else {

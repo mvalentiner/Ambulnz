@@ -55,6 +55,7 @@ class LocationSearchViewController : UIViewController, UISearchBarDelegate, UITa
 			let tableView = UITableView(frame: tableViewFrame)
 			tableView.dataSource = self
 			tableView.delegate = self
+			tableView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.interactive
 			tableView.register(UITableViewCell.self, forCellReuseIdentifier: locationCellId)
 			return tableView
 		}()
@@ -169,10 +170,7 @@ extension PulleyViewController {
 	}
 
 	@objc func handleKeyboardWillAppear(notification: NSNotification) {
-    	guard let userInfo = notification.userInfo else {
-			return
-		}
-		guard let rect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+    	guard let userInfo = notification.userInfo, let rect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
 			return
 		}
 		// Resize the view to accommodate the height of the keyboard popping up.
@@ -189,10 +187,7 @@ extension PulleyViewController {
 	}
 
 	@objc func handleKeyboardWillDisappear(notification: NSNotification) {
-    	guard let userInfo = notification.userInfo else {
-			return
-		}
-		guard let rect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+    	guard let userInfo = notification.userInfo, let rect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
 			return
 		}
 		// Resize the view to accommodate the height of the keyboard going away.

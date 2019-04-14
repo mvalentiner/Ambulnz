@@ -1,6 +1,5 @@
 github "PromiseKit/CoreLocation" "3.0.7"
 github "PromiseKit/Foundation" "3.3.2"
-github "PromiseKit/MapKit" "3.0.2"
-github "ReactiveCocoa/ReactiveSwift" "5.0.1"
-github "antitypical/Result" "4.1.0"
+github "PromiseKit/MapKit" "3.0.3"
+github "ReactiveCocoa/ReactiveSwift" "6.0.0"
 github "mxcl/PromiseKit" "6.8.4"

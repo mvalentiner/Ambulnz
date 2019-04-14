@@ -12,7 +12,6 @@
 		4C3CCE9822527A3C000260F0 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3CCE9422527A3C000260F0 /* ReactiveSwift.framework */; };
 		4C3CCE9922527A3C000260F0 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3CCE9522527A3C000260F0 /* PromiseKit.framework */; };
 		4C3CCE9A22527A3C000260F0 /* MBProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3CCE9622527A3C000260F0 /* MBProgressHUD.framework */; };
-		4C3CCE9B22527A3C000260F0 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3CCE9722527A3C000260F0 /* Result.framework */; };
 		4C45F1322256395600597821 /* PMKFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C45F1312256395600597821 /* PMKFoundation.framework */; };
 		4C45F15822563EE900597821 /* PlaceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F13A22563EE900597821 /* PlaceAnnotation.swift */; };
 		4C45F15922563EE900597821 /* UIView+Anchoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F13C22563EE900597821 /* UIView+Anchoring.swift */; };
@@ -68,7 +67,6 @@
 		4C3CCE9422527A3C000260F0 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/iOS/ReactiveSwift.framework; sourceTree = "<group>"; };
 		4C3CCE9522527A3C000260F0 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
 		4C3CCE9622527A3C000260F0 /* MBProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MBProgressHUD.framework; path = Carthage/Build/iOS/MBProgressHUD.framework; sourceTree = "<group>"; };
-		4C3CCE9722527A3C000260F0 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		4C45F1312256395600597821 /* PMKFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PMKFoundation.framework; path = Carthage/Build/iOS/PMKFoundation.framework; sourceTree = "<group>"; };
 		4C45F13A22563EE900597821 /* PlaceAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceAnnotation.swift; sourceTree = "<group>"; };
 		4C45F13C22563EE900597821 /* UIView+Anchoring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Anchoring.swift"; sourceTree = "<group>"; };
@@ -144,7 +142,6 @@
 				4C45F1322256395600597821 /* PMKFoundation.framework in Frameworks */,
 				4C3CCE9922527A3C000260F0 /* PromiseKit.framework in Frameworks */,
 				4C3CCE9A22527A3C000260F0 /* MBProgressHUD.framework in Frameworks */,
-				4C3CCE9B22527A3C000260F0 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,7 +189,6 @@
 				4C3CCE9622527A3C000260F0 /* MBProgressHUD.framework */,
 				4C3CCE9522527A3C000260F0 /* PromiseKit.framework */,
 				4C3CCE9422527A3C000260F0 /* ReactiveSwift.framework */,
-				4C3CCE9722527A3C000260F0 /* Result.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -383,7 +379,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/MBProgressHUD.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/ReactiveSwift.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PMKFoundation.framework",
 			);
 			name = "Copy Carthage Frameworks";
@@ -393,7 +388,6 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/MBProgressHUD.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/PromiseKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/ReactiveSwift.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Result.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/PMKFoundation.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -416,7 +410,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# /usr/local/bin/carthage outdated --xcode-warnings\n";
+			shellScript = "/usr/local/bin/carthage outdated --xcode-warnings\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -609,7 +603,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.heliotropix.AmbulnzCodeChallenge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -632,7 +626,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.heliotropix.AmbulnzCodeChallenge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
