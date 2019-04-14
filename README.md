@@ -94,6 +94,3 @@ SOA Services are typically registered at App startup.  In this project, in `AppD
  You will also see in `application(application:, didFinishLaunchingWithOptions:)`, a commented out line:
 	 `// GooglePlaceServiceMockImplementation.register()`
 Because I was unable to get the Google address geocoding endpoint working, I created a mock test implementation that returns the expected json to verify that I am parsing it correctly. By simply registering my mock implementation instead of the production version, I could test as much of my code as possible. This exemplifies the power of SOA.  You can see the `GooglePlaceServiceMockImplementation` in GooglePlaceService.swift, line 172.
-
-### **class GoogleGeocodingRequest : UnauthenticatedDataRequest**
-
