@@ -6,7 +6,6 @@
 //	Copyright © 2019 Michael Valentiner. All rights reserved.
 //
 
-import MBProgressHUD
 import MapKit
 import PromiseKit
 import PMKCoreLocation
@@ -34,7 +33,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 
 	// MARK: UI
 	@IBOutlet weak var mapView : MKMapView!
-	private var progressView : MBProgressHUD?
 
 	// MARK: Model
 	private var annotations = MutableProperty<[PlaceAnnotation]>([])

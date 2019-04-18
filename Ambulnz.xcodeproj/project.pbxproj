@@ -11,7 +11,6 @@
 		4C3CCE93225279CD000260F0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4C3CCE92225279CD000260F0 /* README.md */; };
 		4C3CCE9822527A3C000260F0 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3CCE9422527A3C000260F0 /* ReactiveSwift.framework */; };
 		4C3CCE9922527A3C000260F0 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3CCE9522527A3C000260F0 /* PromiseKit.framework */; };
-		4C3CCE9A22527A3C000260F0 /* MBProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3CCE9622527A3C000260F0 /* MBProgressHUD.framework */; };
 		4C45F1322256395600597821 /* PMKFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C45F1312256395600597821 /* PMKFoundation.framework */; };
 		4C45F15822563EE900597821 /* PlaceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F13A22563EE900597821 /* PlaceAnnotation.swift */; };
 		4C45F15922563EE900597821 /* UIView+Anchoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F13C22563EE900597821 /* UIView+Anchoring.swift */; };
@@ -141,7 +140,6 @@
 				4C3CCE9822527A3C000260F0 /* ReactiveSwift.framework in Frameworks */,
 				4C45F1322256395600597821 /* PMKFoundation.framework in Frameworks */,
 				4C3CCE9922527A3C000260F0 /* PromiseKit.framework in Frameworks */,
-				4C3CCE9A22527A3C000260F0 /* MBProgressHUD.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,7 +374,6 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/MBProgressHUD.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/ReactiveSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PMKFoundation.framework",
@@ -385,7 +382,6 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/MBProgressHUD.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/PromiseKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/ReactiveSwift.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/PMKFoundation.framework",
