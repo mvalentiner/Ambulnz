@@ -1,11 +1,12 @@
 # **Ambulnz**
 Ambulnz Code Challenge
 
-For this project, I utilized an exiting app I'm working on that plots places on a map. Lucky me, my app is ideal base app for this code challenge.
+For this project, I utilized an exiting app I'm working on that plots places on a map.
 
 For the app UI, I chose to model it after the Apple Maps app.  To implement the UI, I used a third party framework called Pulley. It provides the sliding drawer that the user can drag open from the bottom of the screen.  The drawer is where I put my search bar and search results, the main ocus of the code challenge.
 
 ## **To build**
+I last updated this project to use Xcode 10.2 and Swift 5.
 The project uses Carthage. Make sure you have it installed. In a bash shell, cd to the Ambulnz directory (the one with the Cartfile), and execute:
 	`carthage update --platform iOS`
 When it's done, in Xcode, select the scheme and device (or simulator) you want to run on, and build. If running on a device, you will need to set the team for code signing: `project file -> Ambulnz target -> General -> Code signing -> team.`
@@ -13,7 +14,7 @@ When it's done, in Xcode, select the scheme and device (or simulator) you want t
 It should build and run.  If not, contact me to troubleshoot.
 
 ## **API Key Configuration**
-Google API key configuration: to call the Google service, you will need to provide a Google api key. (Mine is tied to my account and credit card and, so, is to remain private).  You mostly likely already have one and one that works. I've had difficulties getting the Geocoding API to work with my api key. (I get a response, "This IP, site or mobile application is not authorized to use this API key. Request received from IP address 2604:2000:1304:8280:28a7:b03:e5fa:3d69, with empty referer.")
+Google API key configuration: to call the Google service, you will need to provide a Google api key. (Mine is tied to my account and credit card, so is to remain private).  You mostly likely already have one and one that works. I've had difficulties getting the Geocoding API to work with my api key. (I get a response, "This IP, site or mobile application is not authorized to use this API key. Request received from IP address 2604:2000:1304:8280:28a7:b03:e5fa:3d69, with empty referer.")
 • in *GooglePlaceService.swift, line 136*, modify the **apiKey** String to use yout api key:
 			let apiKey = "<replace with your api key here>"
 
